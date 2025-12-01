@@ -1,0 +1,17 @@
+import esphome.codegen as cg
+import esphome.config_validation as cv
+from esphome.components import sensor, binary_sensor, i2c
+
+TMOS_NS = cg.esphome_ns.namespace("TMOS")
+TMOSComponent = TMOS_NS.class_("TMOSComponent", cg.PollingComponent, i2c.I2CDevice)
+
+CONFIG_SCHEMA = cv.Schema({
+    cv.GenerateID(): cv.declare_id(TMOSComponent),
+
+    cv.Optional("ambient_temperature"): sensor.sensor_schema(),
+    cv.Optional("object_temperature"): sensor.sensor_schema(),
+
+    cv.Optional("presence"): binary_sensor.binary_sensor_schema(),
+    cv.Optional("motion"): binary_sensor.binary_sensor_schema(),
+    cv.Optional("thermal_shock"): binary_sensor.binary_sensor_schema(),
+}).extend(i2c.i2c_device_schema(None))  # address auto-detected
